@@ -154,7 +154,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void resetPassword(PasswordEditDTO passwordEditDTO) {
         String password = passwordEditDTO.getOldPassword();
 
-        Employee employee = employeeMapper.getById(passwordEditDTO.getEmpId());
+        Employee employee = employeeMapper.getById(BaseContext.getCurrentId());
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         if(!password.equals(employee.getPassword())) {
             throw new PasswordEditFailedException(MessageConstant.PASSWORD_EDIT_FAILED);
