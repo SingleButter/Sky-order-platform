@@ -1,7 +1,10 @@
 package com.sky.mapper;
 
+import com.sky.dto.EmployeeDTO;
 import com.sky.entity.Employee;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
@@ -13,6 +16,14 @@ public interface EmployeeMapper {
      * @return
      */
     @Select("select * from employee where username = #{username}")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     Employee getByUsername(String username);
 
+    /**
+     * 插入员工数据
+     * @param employee
+     */
+    @Insert("insert into employee (name, username, password, phone, sex, id_number, create_time, update_time, create_user, update_user) " +
+            "values (#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{createTime},#{updateTime},#{createUser},#{updateUser}) ")
+    void insert(Employee employee);
 }
