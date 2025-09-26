@@ -5,6 +5,9 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface DishMapper {
@@ -29,4 +32,32 @@ public interface DishMapper {
      * @return
      */
     Page<Dish> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    /**
+     * 根据菜品id查询
+     * @param id
+     * @return
+     */
+    @Select("select * from dish where id = #{id}")
+    Dish getById(Long id);
+
+    /**
+     * 修改菜品
+     * @param dish
+     */
+    void update(Dish dish);
+
+    /**
+     * 批量删除菜品
+     * @param ids
+     */
+    void deleteByIds(List<Long> ids);
+
+    /**
+     * 起售和停售菜品
+     * @param id
+     * @param status
+     */
+    @Update("update dish set status = #{status} where id = #{id}")
+    void updateStatus(Long id, Integer status);
 }
