@@ -9,10 +9,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -36,6 +38,8 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
 
 
     /**
@@ -147,9 +151,16 @@ public class DishServiceImpl implements DishService {
      * @param id
      * @param status
      */
-    // TODO 菜品停售，则包含菜品的套餐同时停售。
+    @Transactional
     @Override
     public void startOrStop(Long id, Integer status) {
+        if(status == StatusConstant.DISABLE){
+            List<SetmealDish> setmealDishes = setmealDishMapper.getByDishId(id);
+            for (SetmealDish setmealDish : setmealDishes) {
+                Long setmealId = setmealDish.getSetmealId();
+                setmealMapper.setStatus(StatusConstant.DISABLE, setmealId);
+            }
+        }
         dishMapper.updateStatus(id, status);
     }
 
