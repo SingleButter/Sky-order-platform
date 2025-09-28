@@ -6,6 +6,7 @@ import com.sky.entity.Setmeal;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -59,4 +60,12 @@ public interface SetmealMapper {
      * @param setmeal
      */
     void updateById(Setmeal setmeal);
+
+    /**
+     * 修改套餐状态
+     * @param status
+     * @param id
+     */
+    @Update("update setmeal set status = #{status} where id = #{id}")
+    void setStatus(Integer status, Long id);
 }
